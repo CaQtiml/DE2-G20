@@ -1,0 +1,52 @@
+- name: Install Docker and Pulsar on broker
+  hosts: broker
+  become: yes
+  tasks:
+    - name: Install Docker dependencies
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg
+          - lsb-release
+        state: present
+        update_cache: yes
+
+    - name: Add Docker GPG key
+      shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+    - name: Add Docker repository
+      shell: echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu focal stable" > /etc/apt/sources.list.d/docker.list
+
+    - name: Install Docker
+      apt:
+        name: docker-ce
+        state: latest
+        update_cache: yes
+
+    - name: Start Pulsar container
+      shell: |
+        docker run -d --name pulsar \
+          -p 6650:6650 -p 8080:8080 \
+          --mount source=pulsardata,target=/pulsar/data \
+          --mount source=pulsarconf,target=/pulsar/conf \
+          apachepulsar/pulsar:2.9.4 bin/pulsar standalone
+
+    - name: Install Python and pip
+      apt:
+        name:
+          - python3
+          - python3-pip
+        state: present
+
+    - name: Install pulsar-client
+      pip:
+        name: pulsar-client==2.9.4
+        executable: pip3
+
+    # - name: Copy consumer script
+    #   copy:
+    #     src: ../scripts/consumer.py
+    #     dest: /home/ubuntu/consumer.py
+    #     mode: '0755'
