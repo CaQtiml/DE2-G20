@@ -1,0 +1,13 @@
+- name: Install additional Python dependencies on producer nodes
+  hosts: producers
+  become: yes
+  tasks:
+    - name: Copy requirements.txt to producers
+      copy:
+        src: ../scripts/producer-requirements.txt
+        dest: /home/ubuntu/requirements.txt
+
+    - name: Install Python dependencies via pip
+      pip:
+        requirements: /home/ubuntu/requirements.txt
+        executable: pip3
