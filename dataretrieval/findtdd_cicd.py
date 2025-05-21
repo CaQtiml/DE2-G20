@@ -56,14 +56,27 @@ CI_INDICATORS = [
     "azure-pipelines.yml"
 ]
 
+def github_get(url, params=None, max_retries=1):
+    for _ in range(max_retries + 1):
+        resp = requests.get(url, headers=HEADERS, params=params)
+        if resp.status_code == 403 and "X-RateLimit-Reset" in resp.headers:
+            reset_ts = int(resp.headers["X-RateLimit-Reset"])
+            wait = max(0, reset_ts - time.time()) + RATE_BUFFER
+            print(f"Rate limit hit. Sleeping {wait:.0f} seconds.")
+            time.sleep(wait)
+            continue  # retry after sleep
+        return resp
+    raise RuntimeError(f"Rate limit not lifted after {max_retries} retries.")
 
 def has_unit_tests(repo_full_name: str, language: str = "Unknown") -> bool:
     url = f"https://api.github.com/repos/{repo_full_name}/contents"
     try:
-        resp = requests.get(url, headers=HEADERS)
+        # resp = requests.get(url, headers=HEADERS)
+        resp = github_get(url)
         if resp.status_code != 200:
             return False
         items = resp.json()
+        print(f"Name:{repo_full_name}, Lang:{language}, Keys:{items[0].keys()}, len:{len(items)}")
         lang_patterns = LANG_TEST_PATTERNS.get(language, LANG_TEST_PATTERNS["Other"])
         dir_patterns = [d.lower() for d in lang_patterns["dirs"]]
         file_regexes = [re.compile(p) for p in lang_patterns["files"]]
@@ -83,7 +96,8 @@ def has_unit_tests(repo_full_name: str, language: str = "Unknown") -> bool:
 def uses_continuous_integration(repo_full_name: str) -> bool:
     url = f"https://api.github.com/repos/{repo_full_name}/contents"
     try:
-        resp = requests.get(url, headers=HEADERS)
+        # resp = requests.get(url, headers=HEADERS)
+        resp = github_get(url)
         if resp.status_code != 200:
             return False
         items = resp.json()

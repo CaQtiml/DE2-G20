@@ -47,6 +47,19 @@ LANG_TEST_PATTERNS = {
     "Other":       {"dirs": ["test", "tests"], "files": [r".*test.*"]}  # Fallback for unknown languages
 }
 
+def github_get(url, params=None, max_retries=1):
+    for _ in range(max_retries + 1):
+        resp = requests.get(url, headers=HEADERS, params=params)
+        if resp.status_code == 403 and "X-RateLimit-Reset" in resp.headers:
+            reset_ts = int(resp.headers["X-RateLimit-Reset"])
+            wait = max(0, reset_ts - time.time()) + RATE_BUFFER
+            print(f"Rate limit hit. Sleeping {wait:.0f} seconds.")
+            time.sleep(wait)
+            continue  # retry after sleep
+        return resp
+    raise RuntimeError(f"Rate limit not lifted after {max_retries} retries.")
+
+
 def has_unit_tests(repo_full_name: str, language: str = "Unknown") -> bool:
     """
     Check if a GitHub repository contains files or directories that indicate unit tests.
@@ -54,7 +67,8 @@ def has_unit_tests(repo_full_name: str, language: str = "Unknown") -> bool:
     """
     url = f"https://api.github.com/repos/{repo_full_name}/contents"
     try:
-        resp = requests.get(url, headers=HEADERS)
+        # resp = requests.get(url, headers=HEADERS)
+        resp = github_get(url)
         if resp.status_code != 200:
             return False
         items = resp.json()
@@ -102,14 +116,15 @@ def fetch_repos_with_tests_for_day(day: datetime) -> Counter:
             "per_page": PER_PAGE,
             "page": page
         }
-        resp = requests.get("https://api.github.com/search/repositories", headers=HEADERS, params=params)
+        # resp = requests.get("https://api.github.com/search/repositories", headers=HEADERS, params=params)
 
-        if resp.status_code == 403 and "X-RateLimit-Reset" in resp.headers:
-            reset_ts = int(resp.headers["X-RateLimit-Reset"])
-            wait = max(0, reset_ts - time.time()) + RATE_BUFFER
-            print(f"Rate limit hit. Waiting {wait:.0f} seconds.")
-            time.sleep(wait)
-            continue
+        # if resp.status_code == 403 and "X-RateLimit-Reset" in resp.headers:
+        #     reset_ts = int(resp.headers["X-RateLimit-Reset"])
+        #     wait = max(0, reset_ts - time.time()) + RATE_BUFFER
+        #     print(f"Rate limit hit. Waiting {wait:.0f} seconds.")
+        #     time.sleep(wait)
+        #     continue
+        resp = github_get("https://api.github.com/search/repositories", params=params)
 
         if resp.status_code != 200:
             raise RuntimeError(f"GitHub API error: {resp.status_code} — {resp.text}")
