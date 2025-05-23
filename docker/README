@@ -1,0 +1,7 @@
+This directory is used to build the docker image. Need to change the git hub token and broker address in .env
+These commands are used to run the different scripts:
+
+docker run --rm --env-file .env morioxd/de2-project python pulsar_producer_commit.py
+
+This command uses the hosts .env file which need to be set according to the instructions in .env. 
+The last part of the command is the scipt what will run, so change it accordingly. 
