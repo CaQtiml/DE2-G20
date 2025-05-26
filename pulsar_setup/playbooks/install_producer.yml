@@ -15,8 +15,3 @@
         name: pulsar-client==2.9.4
         executable: pip3
 
-    # - name: Copy producer script
-    #   copy:
-    #     src: ../scripts/producer.py
-    #     dest: /home/ubuntu/producer.py
-    #     mode: '0755'

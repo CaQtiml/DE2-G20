@@ -44,9 +44,3 @@
       pip:
         name: pulsar-client==2.9.4
         executable: pip3
-
-    # - name: Copy consumer script
-    #   copy:
-    #     src: ../scripts/consumer.py
-    #     dest: /home/ubuntu/consumer.py
-    #     mode: '0755'
