@@ -99,4 +99,44 @@ If you want to make changes to the image, follow these steps:
     docker push morioxd/de2-project:latest
     ```
 
-# Instructions for Getting Results: TBD
+# Instructions for Getting Results
+
+Once the Pulsar system finishes running, the results are automatically generated and stored by the consumer and analytics pipeline.
+
+## What to Expect
+
+- **Visualizations:** Graph images answering the 4 analytical questions.
+- **Report:** A `report.txt` file summarizing the answers to all questions.
+- **Error Logs:** A `result.txt` file containing any error logs from the analytics process.
+
+## Where to Find Results
+
+- All graph images and the `report.txt` file are located in the `results` directory inside the `pulsar_api_stuff_and_analytics` folder.
+- The `result.txt` error log is located directly inside the `pulsar_api_stuff_and_analytics` directory (not inside the `results` folder).
+
+## How Results Are Generated
+
+- The consumer script `pulsar_consumer.py` automatically collects data from the producers and saves it as JSON files.
+- Upon completion, `pulsar_consumer.py` triggers `analytics.py` which processes the JSON data, generates plots, and writes the report and logs.
+- No manual intervention is required to generate the results once the consumer script has finished running.
+
+## Accessing Results
+
+1. SSH into the Broker VM (`Group20_1`).
+2. Navigate to the analytics directory:
+    ```bash
+    cd ~/pulsar_api_stuff_and_analytics
+    ```
+3. View the generated report:
+    ```bash
+    cat report.txt
+    ```
+4. Explore the graphs inside the `results` folder:
+    ```bash
+    ls results/
+    ```
+5. Check for any errors during analysis:
+    ```bash
+    cat result.txt
+    ```
+

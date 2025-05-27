@@ -1,0 +1,41 @@
+
+=== Q1: Top 10 Languages by Project Count ===
+ 1. Python               1486
+ 2. Go                   1043
+ 3. JavaScript           670
+ 4. TypeScript           581
+ 5. HTML                 511
+ 6. Java                 270
+ 7. Jupyter Notebook     239
+ 8. C++                  232
+ 9. C                    149
+10. C#                   148
+
+=== Q2: Top 10 Most Active Repos by Commits ===
+ 1. your-api/your-api    1000
+ 2. Sawi78112/instagrapi 1000
+ 3. linuxmint/libadwaita-1.5 1000
+ 4. FlagTree/flagtree    1000
+ 5. Aeron1-bit/PyWxDump  1000
+ 6. xapp-project/libadapta 1000
+ 7. Sined003/BNBRevoke   1000
+ 8. Sined003/BlumCoin    1000
+ 9. auo1i/JPG-to-PDF     1000
+10. Reserve-Station/Reserve-Station 1000
+
+=== Q3: Top 10 Languages with TDD ===
+ 1. Go                   48
+ 2. Python               10
+ 3. TypeScript           3
+ 4. JavaScript           2
+ 5. HTML                 1
+ 6. Pascal               1
+ 7. C                    1
+ 8. Shell                1
+ 9. C++                  1
+
+=== Q4: Top 10 Languages with TDD+CI/CD ===
+ 1. TypeScript           3
+ 2. Python               2
+ 3. Go                   1
+ 4. C++                  1
