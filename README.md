@@ -98,6 +98,18 @@ If you want to make changes to the image, follow these steps:
     ```bash
     docker push morioxd/de2-project:latest
     ```
+## Pulsar Consumer Container Quickstart
+
+To make output files (e.g., JSON, plots) accessible outside the container, use the following command:
+
+```bash
+docker run --rm -it \
+    --env-file .env \
+    -v $(pwd)/output:/app/output \
+    morioxd/de2-project \
+    python pulsar_consumer.py
+```
+
 
 # Instructions for Getting Results
 
