@@ -170,6 +170,20 @@ def fetch_repos_with_tests_and_ci_for_day(day: datetime) -> Counter:
 
     return lang_counter
 
+def analyze_tdd_cicd(start: datetime, end: datetime) -> dict:
+    agg = Counter()
+    current = start
+    while current <= end:
+        day_counts = fetch_repos_with_tests_and_ci_for_day(current)
+        agg.update(day_counts)
+        current += timedelta(days=1)
+
+    return {
+        "from": start.isoformat(),
+        "to": end.isoformat(),
+        "languages": dict(agg)
+    }
+
 
 if __name__ == "__main__":
     END_DATE = datetime.now(timezone.utc)

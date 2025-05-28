@@ -21,6 +21,6 @@ result = analyze_languages(start, end)
 payload = json.dumps(result).encode("utf-8")
 producer.send(payload)
 
-print("✅ Language stats sent to Pulsar.")
+print("Language stats sent to Pulsar.")
 
 client.close()

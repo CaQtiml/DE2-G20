@@ -47,4 +47,10 @@ def consume():
         client.close()
 
 if __name__ == "__main__":
-    consume()
+    try:
+        consume()
+    except KeyboardInterrupt:
+        print("Interrupted by user.")
+    finally:
+        print("🔁 Running analytics...")
+        os.system("python3 analytics.py")

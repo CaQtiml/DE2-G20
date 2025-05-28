@@ -112,6 +112,17 @@ def aggregate_languages(start: datetime, end: datetime) -> Counter:
         current += timedelta(days=1)
     return total
 
+def analyze_languages(start: datetime, end: datetime) -> dict:
+    """
+    Analyze GitHub repos created between `start` and `end`, grouped by language.
+    """
+    aggregated = aggregate_languages(start, end)
+    return {
+        "from": start.isoformat(),
+        "to": end.isoformat(),
+        "languages": dict(aggregated)
+    }
+
 
 if __name__ == "__main__":
     # ——— Dynamic one-year window ———
