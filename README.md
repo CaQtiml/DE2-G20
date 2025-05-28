@@ -81,7 +81,7 @@ To run different scripts, use the following command:
 docker run --rm --env-file .env morioxd/de2-project python pulsar_producer_commit.py
 ```
 
-- The last part of the command specifies the script to run, so change it accordingly.
+- The last part of the command specifies the script to run, so change it accordingly (script names can be found in `/docker`.
 - This command uses the host's `.env` file, which needs to be configured as shown in the image below:
 
 ![Environment Configuration](https://github.com/user-attachments/assets/0bce54ae-5b1a-4042-b264-0c000eaee707)
